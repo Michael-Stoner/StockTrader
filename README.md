@@ -27,10 +27,10 @@ The [Uno Platform](https://platform.uno/blog/webassembly-threading-in-net/) does
 
 **However**, after experimentation, the suuport is not currently fully fleshed out.  Two threads do run as expected, however if you attempt to spin up more threads, they do not start and no errors or warnings are given in the browser console.  The initial assumption is 2 threads are supported and the other threads will run from the threadpool once one thread finishes, but this is not the case. The threads that are queued in the threadpool never execute and are essentially lost.
 
-I posed the question about the lost threads.  It was suggested that the issue may lie with [emscripten](https://emscripten.org/) and the way in which things are compiled, however the suggested solution did not work.  It clearly made a difference in the output to the console, but the same behavior persists.  This leads me to believe that the problem lies in either Mono or the Uno Platform.
+I [posed the question](https://stackoverflow.com/questions/64457269/how-many-threads-does-the-uno-platform-support-for-wasm-webassembly-projects) about the lost threads.  It was suggested that the issue may lie with [emscripten](https://emscripten.org/) and the way in which things are compiled, however the suggested solution did not work.  It clearly made a difference in the output to the console, but the same behavior persists.  This leads me to believe that the problem lies in either Mono or the Uno Platform.
 
 The Uno Platform is geared towards building apps that run everywhere.  This means the nice things to have (like url parsing, multiple endpoints, etc.) do not appear to be available using Uno.  This makes it less desirable (for me at least) for distributing work using this method.
 
-For these reasons, I have decided not to proceed with Uno Platform but instead use Blazor WASM with the expectation that suppport will eventually be provided.
+For these reasons, I have decided not to proceed with Uno Platform but instead use Blazor WASM with the expectation that suppport for multi-threading will eventually be provided.
 
 
