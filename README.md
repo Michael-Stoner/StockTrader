@@ -19,7 +19,7 @@ All Web Assembly apps currently run in a **single thread**.
 * **As of November 2020**, the Web Assembly standard **does** support multi-threading. 
 * Both Chrome and Edge support Web Assembly multi-threading.
 * The current versions of Mono (on which Blazor and Uno Platform are built) support multi-threading
-* **However**, Blazor Web Assembly is built upon an older Mono release, and does not support multi-threading.  In addition, it does not appear that multi-threading support is on the roadmap for .NET 6 which is to be released in Novermber 2021.  Thus true multi-threading support may not be available in Blazor WASM for quite some time.
+* **However**, Blazor Web Assembly is built upon an older Mono release, and **does not** support multi-threading.  In addition, it does not appear that multi-threading support is on the roadmap for .NET 6 which is to be released in Novermber 2021.  Thus, true multi-threading support may not be available in Blazor WASM for quite some time.
 
 
 ## Uno Platform on Web Assembly with Multi-Threading
