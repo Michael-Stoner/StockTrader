@@ -5,7 +5,7 @@ I am converting a traditional console app (my stock trader app) that runs permut
 
 # Status:  Unfinished
 
-The app is currently unfinished, however many approaches have been tested and several findings have already been uncovered.  The UI has not been fleshed out aside from those areas that are necessary to get to some initial core functionality (i.e. creating purmuations of trading approaches or scenarios).
+The app is currently unfinished, however many approaches have been tested and several findings have already been uncovered.  The UI has not been fleshed out aside from those areas that are necessary to get to some initial core functionality (i.e. creating purmuations of trading approaches or scenarios).  As a result, the UI is currently quite ugly and unformatted.
 
 # Current Findings
 
