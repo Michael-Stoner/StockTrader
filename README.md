@@ -13,11 +13,11 @@ All Web Assembly apps currently run in a **single thread**.
 * Yielding execution to the UI (in this case, Blazor WASM), causes significant slow downs and doesn't allow work to really be done in the *Background*
 * Not yielding, causes the UI to hang as in other single threaded applications.
 * Both Chrome and Edge will prompt to close the application if the application is in a tight loop and cannot respond.  This forces apps to yield no matter what.
-* It is possible to open a new tab from the application which will give another "thread" of execution.  This is the current approach I am using to perform work, however, the application still must have a UI and still must yield execution so that the browswer does not close the application.
+* It is possible to open a new tab from the application which will give another "thread" of execution.  This is the current approach I am using to perform work, however, the new tab still must have a UI and still must yield execution so that the browswer does not close the application.
 
 # Research & Future
 * **As of November 2020**, the [Web Assembly specification](https://webassembly.github.io/spec/core/) **does** support multi-threading. 
-* Both Chrome and Edge support Web Assembly multi-threading.
+* Both Chrome and Edge support Web Assembly multi-threading as of mid 2020.
 * The more current versions of [Mono](https://www.mono-project.com/) (on which Blazor and Uno Platform are built) support multi-threading
 * **However**, Blazor Web Assembly is built upon an older Mono release, and **does not** support multi-threading.  In addition, it does not appear that multi-threading support is on the roadmap for .NET 6 which is to be released in Novermber 2021.  Thus, true multi-threading support may not be available in Blazor WASM for quite some time.
 
