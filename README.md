@@ -16,7 +16,7 @@ All Web Assembly apps currently run in a **single thread**.
 * It is possible to open a new tab from the application which will give another "thread" of execution.  This is the current approach I am using to perform work, however, the application still must have a UI and still must yield execution so that the browswer does not close the application.
 
 # Research & Future
-* **As of November 2020**, the Web Assembly standard **does** support multi-threading. 
+* **As of November 2020**, the [Web Assembly specification](https://webassembly.github.io/spec/core/) **does** support multi-threading. 
 * Both Chrome and Edge support Web Assembly multi-threading.
 * The more current versions of [Mono](https://www.mono-project.com/) (on which Blazor and Uno Platform are built) support multi-threading
 * **However**, Blazor Web Assembly is built upon an older Mono release, and **does not** support multi-threading.  In addition, it does not appear that multi-threading support is on the roadmap for .NET 6 which is to be released in Novermber 2021.  Thus, true multi-threading support may not be available in Blazor WASM for quite some time.
