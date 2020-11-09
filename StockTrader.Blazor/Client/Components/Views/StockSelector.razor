@@ -1,0 +1,170 @@
+﻿@using Syncfusion.Blazor.DropDowns
+@using Syncfusion.Blazor.Buttons
+@using Syncfusion.Blazor.Popups
+@using StockTrader.Dtos
+@using StockTrader.Blazor.Client.Components.Code
+@using StockTrader.Blazor.Client.Components.ViewModels
+
+@inject HttpClient http
+@inherits StockSelectorBase
+    Currently Selected Stocks
+<div class="stocklist-container">
+    <div class="stocklist">
+        @if (Selections != null)
+        {
+            @foreach (var item in Selections)
+            {
+                <div class="stocklist-item">
+                    <span>@item</span>
+                </div>
+            }
+        }
+    </div>
+    <div class="stocklist-button">
+        <Syncfusion.Blazor.Buttons.SfButton @onclick="ShowStockSelector">Select</Syncfusion.Blazor.Buttons.SfButton>
+    </div>
+</div>
+
+<SfDialog Width="435px" @bind-Visible="showStockSelector" IsModal="true">
+    <DialogTemplates>
+        <Header>
+            <div class="header">
+                Select Stocks
+            </div>
+        </Header>
+        <Content>
+
+            <div>
+                Add from predefined group? <SfButton @onclick="() => showPredefinedGroupDialog = true">Add Group</SfButton>
+            </div>
+
+            <SfMultiSelect TValue="List<string>"
+                           ModelType="@model"
+                           DataSource="@Stocks"
+                           @bind-Value="@Selections"
+                           Placeholder="Select stocks"
+                           ShowDropDownIcon="true">
+                <MultiSelectTemplates>
+                    <ItemTemplate>
+                        <div class="listitem"><div>@((context as StockReadDto).Name)</div><div>@((context as StockReadDto).Ticker)</div></div>
+                    </ItemTemplate>
+                    @*<ValueTemplate>
+                            <span>@((context as StockReadDto).Ticker)</span>
+                        </ValueTemplate>*@
+                    <HeaderTemplate>
+                        <div class="header listitem"><div>Company Name</div><div>Ticker</div></div>
+                    </HeaderTemplate>
+                    <FooterTemplate>
+                        <span class='footer'>S&amp;P 500 stocks</span>
+                    </FooterTemplate>
+                </MultiSelectTemplates>
+                <MultiSelectFieldSettings Value="Ticker"></MultiSelectFieldSettings>
+                <MultiSelectEvents TValue="List<string>" ValueChange="OnChange"></MultiSelectEvents>
+            </SfMultiSelect>
+            <div>
+                <span>
+                    Create group from selections?
+                </span>
+                <SfButton>Create</SfButton>
+            </div>
+        </Content>
+        <FooterTemplate>
+            <div class="footer">
+                <SfButton IsPrimary="true" @onclick="StockSelectorOkClicked">Ok</SfButton>
+                <SfButton @onclick="StockSelectorCancelClicked">Cancel</SfButton>
+            </div>
+        </FooterTemplate>
+    </DialogTemplates>
+</SfDialog>
+
+<SfDialog Height="300px" Width="435px" @bind-Visible="showPredefinedGroupDialog" IsModal="true">
+    <DialogTemplates>
+        <Header>
+            <div class="header">Select predefined group</div>
+        </Header>
+        <Content>
+            <div>Predefined Groups</div>
+            <SfComboBox TValue="string" TItem="PredefinedGroup"
+                        DataSource=@PredefinedGroups
+                        @bind-Value=@PredefinedGroupName
+                        PopupHeight="230px"
+                        Placeholder="Select a predefined group">
+                <ComboBoxFieldSettings Text="Name"></ComboBoxFieldSettings>
+            </SfComboBox>
+        </Content>
+        <FooterTemplate>
+            <div class="footer">
+                <SfButton IsPrimary="true" @onclick="PredefinedDialogOkClicked">Ok</SfButton>
+                <SfButton @onclick="PredefinedDialogCancelClicked">Cancel</SfButton>
+            </div>
+        </FooterTemplate>
+    </DialogTemplates>
+    <DialogEvents Closed="@DialogClose"></DialogEvents>
+</SfDialog>
+<style>
+
+    .header {
+        font-weight: 600;
+        color: rgba(0, 0, 0, .54);
+        height: 48px;
+        padding: 15px 0 0 16px;
+        font-size: 16px;
+        background-color: #f5f5f5;
+        font-family: "Segoe UI", "GeezaPro", "DejaVu Serif";
+    }
+
+    .footer {
+        text-indent: 1.2em;
+        display: block;
+        font-size: 15px;
+        line-height: 40px;
+        border-top: 1px solid #e0e0e0;
+        border-bottom: 1px solid #e0e0e0;
+        background-color: #f5f5f5;
+    }
+
+    .hidden {
+        display: none;
+    }
+
+    .listitem {
+        display: grid;
+        grid-template-columns: auto 60px
+    }
+
+    .bootstrap .ename {
+        font-size: 15px;
+        margin-top: 20px;
+        opacity: .87;
+        padding: 3px 0 20px;
+    }
+
+    .stocklist-container {
+        min-height: 50px;
+        flex-direction: row;
+        display:flex;
+    }
+
+    .stocklist {
+        flex-direction: row;
+        justify-content: flex-start;
+        Padding: 5px;
+        border: 1px solid var(--secondary);
+        flex-grow: 1;
+    }
+
+    .stocklist-button {
+        flex-basis: auto;
+        width: auto;
+        margin: 0px 0px 0px 5px;
+    }
+
+    .stocklist-item {
+        margin: 0px 0px 5px 0px;
+        padding: 3px 5px 3px 5px;
+        background: var(--secondary);
+        color: white; /*var(--white:);*/
+        display: inline-flex;
+        border-radius: 5px 5px;
+    }
+</style>

@@ -1,0 +1,43 @@
+﻿@using Syncfusion.Blazor.Calendars
+@using Syncfusion.Blazor.Inputs
+@using StockTrader.Blazor.Client.Components.Code
+@using Syncfusion.Blazor.Popups
+@using Syncfusion.Blazor.Buttons
+@inherits DefineApproachBase
+
+<SfDialog Width="80%" @bind-Visible="Visible">
+    <h3>Define Approach</h3>
+
+    <div hidden="@Step1Hidden">
+        <SfDateRangePicker Placeholder="Date Range To Test"></SfDateRangePicker>
+
+        <div class="control-label">
+            Starting Dollars Per Stock
+        </div>
+        <SfNumericTextBox TValue="double?" Format="c2" Value=10000></SfNumericTextBox>
+        <div class="control-label">
+            Discard any result that produces less than X percent
+        </div>
+        <SfNumericTextBox TValue="double?" Format="p2" Value=0.17 Max=1 Min=0 Step=0.01></SfNumericTextBox>
+
+        <StockSelector @bind-Selections="ApproachDefinition.StockTickers" />
+
+        <AlgorithmSelector SelectedAlgorithmsChanged="AlgorithmsChanged" />
+        <SfButton @onclick="Step1Next">Next</SfButton>
+    </div>
+
+    <div hidden="@Step2Hidden">
+        <p>Clicking finish will generate a large number of run definitions that will be used to test the approach.  The number of run definitions is listed below and corresponds to the cartesian product of all the algorithms with all permutations of all parameters.  For example, a single algorithm with a single parameter with a range of 1 to 10 with a step of 1, will yield 10 run definitions. The same parameter with a step of 0.5 will yeild 20 run definitions.  Two algorithms of 20 parameter variations like before, will yeild 400 run definitions.  </p>
+        <p>The number of permutations can get very large very quickly, thus it is important that you double check your selections to ensure the runs will be meaningful, and ultimately doable with the timespan of the universe.</p>
+        <h3>Statistics of configured approach</h3>
+        <div>Total number of run definitions: @TotalPermutationCount </div>
+        <p>The proces to save the defintions will take some time.</p>
+        <div>Generate run definitions?</div>
+        <SfButton @onclick="Step2Back">Back</SfButton>
+        <SfButton @onclick="GenerateRuns">Generate Run Definitions</SfButton>
+    </div>
+
+    <div hidden="@Step3Hidden">
+        <div>@CurrentPermutationCount of @TotalPermutationCount generated.</div>
+    </div>
+</SfDialog>

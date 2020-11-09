@@ -1,0 +1,289 @@
+﻿@using Syncfusion.Blazor.Popups
+@using Syncfusion.Blazor.Grids
+@using StockTrader.Approaches
+@using Syncfusion.Blazor.Inputs
+@using Syncfusion.Blazor.Buttons
+@using StockTrader.Blazor.Client.Components.Code
+@inherits StockTrader.Blazor.Client.Components.Code.AlgorithmSelectorBase
+
+<div>
+    Currently Selected Algorithms
+</div>
+<div class="algorithm-component-grid">
+    <div class="algorithm-buylabel">Buy Algorithms</div>
+    <div class="algorithm-buy border">
+
+        @if (SelectedAlgorithms != null)
+        {
+            @foreach (var item in SelectedAlgorithms.Where(a => !a.SellDefinition))
+            {
+                <div class="algorithm-item">
+                    <span>@((MarkupString)Common.GetAlgorithDescription(@item, false, "parameter-name", "parameter-value"))</span>
+                </div>
+            }
+        }
+    </div>
+    <div class="algorithm-selllabel">Sell Algorithms</div>
+    <div class="algorithm-sell border">
+        @if (SelectedAlgorithms != null)
+        {
+            @foreach (var item in SelectedAlgorithms.Where(a => a.SellDefinition))
+            {
+                <div class="algorithm-item">
+                    <span>@((MarkupString)Common.GetAlgorithDescription(@item, false, "parameter-name", "parameter-value"))</span>
+                </div>
+            }
+        }
+    </div>
+    <div class="algorithm-button">
+        <Syncfusion.Blazor.Buttons.SfButton @onclick="Show">Select</Syncfusion.Blazor.Buttons.SfButton>
+    </div>
+</div>
+
+<SfDialog Width="80%" Height="80%" @bind-Visible="ShowAlgorithmSelector" IsModal="true">
+    <DialogTemplates>
+        <Header>
+            <div class="header">
+                Select Algorithms
+            </div>
+        </Header>
+        <Content>
+            <div class="stocklist">
+                @if (SelectedAlgorithms != null)
+                {
+                    @foreach (var item in SelectedAlgorithms.Where(a => !a.SellDefinition))
+                    {
+                        <div class="stocklist-item">
+                            <span>@((MarkupString)Common.GetAlgorithDescription(@item, false, "parameter-name", "parameter-value"))</span>
+                        </div>
+                    }
+                }
+            </div>
+            <div class="stocklist">
+                @if (SelectedAlgorithms != null)
+                {
+                    @foreach (var item in SelectedAlgorithms.Where(a => a.SellDefinition))
+                    {
+                        <div class="stocklist-item">
+                            <span>@((MarkupString)Common.GetAlgorithDescription(@item, false, "parameter-name", "parameter-value"))</span>
+                        </div>
+                    }
+                }
+            </div>
+
+            @foreach (var algorithm in AvailableAlgorithms)
+            {
+                <div class="algorithm-list-container">
+                    <input class="algorithm-checkbox" type="checkbox" @onchange="(eventArgs) => { ToggleAlgorithm( (bool)eventArgs.Value, algorithm); }" />
+                    @if (algorithm.SellDefinition)
+                    {
+                        <div class="algorithm-sellcolor algorithm-buysell">Sell</div>
+                    }
+                    else
+                    {
+                        <div class="algorithm-buycolor algorithm-buysell">Buy</div>
+                    }
+                    <div class="algorithm-name">@algorithm.Name</div>
+                    <div class="algorithm-parm" hidden="@(!AlgorithmSelected(algorithm))">
+
+                        @if (AlgorithmSelected(algorithm))
+                        {
+                            @if (algorithm != null)
+                            {
+                                @for (int i = 0; i < algorithm.Parameters.Count; i++)
+                                {
+                                    <div>
+                                        <AlgoritmParameterEditor ParmId="@i" AlgorithmDefinition="@algorithm" OnChanged="OnChanged" />
+                                    </div>
+                                }
+                            }
+                        }
+                    </div>
+                </div>
+
+            }
+        </Content>
+        <FooterTemplate>
+            <div class="footer">
+                <SfButton IsPrimary="true" @onclick="OkClicked">Ok</SfButton>
+                <SfButton @onclick="CancelClicked">Cancel</SfButton>
+            </div>
+        </FooterTemplate>
+    </DialogTemplates>
+</SfDialog>
+
+<style>
+    /*    .algorithm-grid {
+            min-height: 50px;
+            display: grid;
+            grid-template-columns: auto 20px auto;
+        }*/
+
+    .algorithm-component-grid {
+        display: grid;
+        grid-template-columns: auto min-content;
+        grid-template-rows: min-content minmax(4.5em, auto) min-content minmax(4.5em, auto);
+        grid-column-gap: 1em;
+        grid-template-areas: "buylabel  ." "buy       button" "selllabel button" "sell      button";
+        background-color: cornsilk;
+    }
+
+    .algorithm-buylabel {
+        grid-area: buylabel;
+    }
+
+    .algorithm-selllabel {
+        grid-area: selllabel;
+    }
+
+    .algorithm-buy {
+        grid-area: buy;
+        flex-direction: row;
+        justify-content: flex-start;
+        overflow-y: auto
+    }
+
+    .algorithm-sell {
+        grid-area: sell;
+        flex-direction: row;
+        justify-content: flex-start;
+        overflow-y: auto
+    }
+
+    .algorithm-button {
+        grid-area: button;
+    }
+
+    .algorithm-item {
+        margin: .25em;
+        padding: 3px 5px 3px 5px;
+        background: var(--secondary);
+        color: white; /*var(--white:);*/
+        display: inline-flex;
+        border-radius: 5px 5px;
+    }
+
+    .algorithm-list-container {
+        display: grid;
+        grid-template-columns: 2em 3em 10em auto;
+        grid-column-gap: 1em;
+        grid-template-areas: "checkbox buysell name description" ". parm parm parm";
+    }
+
+    .algorithm-checkbox {
+        grid-area: checkbox;
+        align-self: center;
+    }
+
+    .algorithm-buysell {
+        grid-area: buysell
+    }
+
+    .algorithm-buycolor {
+        color: red;
+    }
+
+    .algorithm-sellcolor {
+        color: green;
+    }
+
+    .algorithm-name {
+        grid-area: name
+    }
+
+    .algorithm-description {
+        grid-area: description
+    }
+
+    .algorithm-parm {
+        grid-area: parm;
+        background-color: aliceblue;
+        border: 1px;
+        border-color: navy;
+    }
+
+    .border {
+        border: 1px solid var(--secondary);
+    }
+
+    .header {
+        font-weight: 600;
+        color: rgba(0, 0, 0, .54);
+        height: 48px;
+        padding: 15px 0 0 16px;
+        font-size: 16px;
+        background-color: #f5f5f5;
+        font-family: "Segoe UI", "GeezaPro", "DejaVu Serif";
+    }
+
+    .footer {
+        text-indent: 1.2em;
+        display: block;
+        font-size: 15px;
+        line-height: 40px;
+        border-top: 1px solid #e0e0e0;
+        border-bottom: 1px solid #e0e0e0;
+        background-color: #f5f5f5;
+    }
+
+    .hidden {
+        display: none;
+    }
+
+    .listitem {
+        display: grid;
+        grid-template-columns: auto 60px
+    }
+
+    .bootstrap .ename {
+        font-size: 15px;
+        margin-top: 20px;
+        opacity: .87;
+        padding: 3px 0 20px;
+    }
+
+    .stocklist {
+        flex-direction: row;
+        justify-content: flex-start;
+        Padding: 5px;
+        border: 1px solid var(--secondary);
+        flex-grow: 1;
+    }
+
+    .stocklist-button {
+        flex-basis: auto;
+        width: auto;
+        margin: 0px 0px 0px 5px;
+    }
+
+    .statustemp {
+        position: relative;
+        height: 19px;
+        border-radius: 5px;
+        text-align: center;
+    }
+
+    .e-activecolor {
+        color: #00cc00;
+        position: relative;
+        top: 9px;
+    }
+
+    .e-inactivecolor {
+        color: #e60000;
+        position: relative;
+        top: 9px;
+    }
+
+    .parameter-box {
+        margin-left: 20px;
+    }
+
+    .parameter-name {
+        color: springgreen;
+    }
+
+    .parameter-value {
+        color: burlywood;
+    }
+</style>

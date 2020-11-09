@@ -1,0 +1,37 @@
+﻿@page "/approaches"
+@using StockTrader.Blazor.Shared
+@using StockTrader.Dtos
+@using StockTrader.Blazor.Client.Components.Views
+@using Syncfusion.Blazor.Popups
+
+@inherits StockTrader.Blazor.Client.Pages.Code.ApproachesBase
+
+<h3>Approaches</h3>
+
+<div>
+    <button class="btn-dark" @onclick="DefineNewApproach">Define New</button>
+</div>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Name</th>
+            @*<th>Definition</th>*@
+        </tr>
+    </thead>
+    <tbody>
+        @if (approaches != null)
+        {
+            @foreach (var approach in approaches)
+            {
+                <tr>
+                    <td>@approach.Id</td>
+                    <td>@approach.Name</td>
+                    @*<td>@approach.ApproachDefinitionJson</td>*@
+                </tr>
+            }
+        }
+    </tbody>
+</table>
+
+<DefineApproach @bind-Visible="ShowDefine"></DefineApproach>

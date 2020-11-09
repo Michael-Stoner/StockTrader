@@ -1,0 +1,36 @@
+﻿@page "/generateruns/{ApproachId:int}"
+@using Syncfusion.Blazor.Popups
+@using Syncfusion.Blazor.Buttons
+
+@inherits StockTrader.Blazor.Client.Pages.Code.GenerateRunDefintionsBase
+@inject Blazored.LocalStorage.ILocalStorageService localStorage
+
+<h3>Generating Run Definitions</h3>
+
+<div hidden="@GenerateError">
+
+    <div>Do not close this window.  It will be closed automatically.</div>
+    <div>Status will be updated in the main app.</div>
+    <div>Current status:  @CurrentPermutation of @TotalPermutations (@($"{PercentComplete:P}"))</div>
+    <div>Time Remaining: @TimeRemaining</div>
+</div>
+
+<SfDialog @bind-Visible="GenerateError" IsModal="true">
+    <DialogTemplates>
+        <Header>
+            <div class="header">
+                Unable to find algorithm definition
+            </div>
+        </Header>
+        <Content>
+            <div>
+                The algorithm definition could not be found.
+            </div>
+        </Content>
+        <FooterTemplate>
+            <div class="footer">
+                <button type="button" onclick="javascript:window.close('','_parent','');">Close</button>
+            </div>
+        </FooterTemplate>
+    </DialogTemplates>
+</SfDialog>

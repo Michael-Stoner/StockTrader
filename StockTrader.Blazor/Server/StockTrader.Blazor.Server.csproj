@@ -1,0 +1,18 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <UserSecretsId>694bd783-bd1e-4d50-a77a-d7f278317015</UserSecretsId>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="3.2.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Client\StockTrader.Blazor.Client.csproj" />
+    <ProjectReference Include="..\Shared\StockTrader.Blazor.Shared.csproj" />
+  </ItemGroup>
+
+
+</Project>

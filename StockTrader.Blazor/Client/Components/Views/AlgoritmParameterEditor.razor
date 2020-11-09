@@ -1,0 +1,112 @@
+﻿@using Syncfusion.Blazor.Buttons
+@using Syncfusion.Blazor.Inputs
+@inherits StockTrader.Blazor.Client.Components.Code.AlgorithmParameterEditorBase
+
+<div class="parameter-component-grid">
+
+    @if (Parameter != null)
+    {
+        <div class="parameter-name">@(Parameter.Name)</div>
+        <div class="parameter-description">A simple description</div>
+
+        @if (Parameter?.ValueIsBoolean ?? false)
+        {
+            <div class="param1">
+                <SfSwitch @bind-Checked="@Parameter.BooleanValue"
+                          ValueChange="@((Syncfusion.Blazor.Buttons.ChangeEventArgs<bool> e) => OnChangeAll(e))"></SfSwitch>
+
+                @if (Parameter.BooleanValue)
+                {
+                    <span> True </span>
+                }
+                else
+                {
+                    <span> False </span>
+                }
+            </div>
+        }
+        else
+        {
+            <div class="param1">
+                <label class="switch-label param-label">Use Range?</label><SfSwitch @bind-Checked="@Parameter.UseRange"></SfSwitch>
+            </div>
+
+            @if (Parameter.UseRange)
+            {
+                <div class="param2 ">
+                    <label class="param-label">Range Start</label><SfNumericTextBox TValue="double" @bind-Value="Parameter.RangeStart" ValidateDecimalOnType="true" Format="G10" Decimals=4 />
+                </div>
+
+                <div class="param3 ">
+                    <label class="param-label">Range End</label><SfNumericTextBox TValue="double" @bind-Value="Parameter.RangeEnd" ValidateDecimalOnType="true" Format="G10" Decimals=4 @onchange="@((ChangeEventArgs e) => OnChangeAll(e))"></SfNumericTextBox>
+                </div>
+                <div class="param4 ">
+                    <label class="param-label">Range Step</label><SfNumericTextBox TValue="double" @bind-Value="Parameter.RangeStep" ValidateDecimalOnType="true" Format="G10" Decimals=4 @onchange="@((ChangeEventArgs e) => OnChangeAll(e))"></SfNumericTextBox>
+                </div>
+            }
+            else
+            {
+                <div class="param2">
+                    <label class="param-label">Value</label><SfNumericTextBox TValue="double" @bind-Value="Parameter.NumericValue" ValidateDecimalOnType="true" Format="G10" Decimals=4 @onchange="@((ChangeEventArgs e) => OnChangeAll(e))"></SfNumericTextBox>
+                </div>
+            }
+        }
+
+    }
+</div>
+
+<style>
+
+    .parameter-component-grid {
+        display: grid;
+        grid-template-columns: 1em 11em repeat(4, auto);
+        grid-template-rows: auto auto;
+        grid-column-gap: 1em;
+        grid-row-gap: 1em;
+        grid-template-areas: "Name Name Description Description Description Description" ".    Param1 Param2 Param3 Param4 Param5"
+    }
+
+    .parameter-name {
+        font-weight: 200;
+        grid-area: Name;
+    }
+
+    .parameter-description {
+        grid-area: Description;
+    }
+
+    .param1 {
+        grid-area: Param1;
+    }
+
+    .param2 {
+        grid-area: Param2;
+    }
+
+    .param3 {
+        grid-area: Param3;
+    }
+
+    .param4 {
+        grid-area: Param4;
+    }
+
+    .param5 {
+        grid-area: Param5;
+    }
+
+    .param-label {
+        display: inline;
+    }
+
+    .parameter-box {
+        width: 200px;
+        margin-left: 20px;
+        background-color: var(--gray);
+        padding: 5px;
+    }
+
+    .switch-label {
+        margin: 0px 5px 0px 0px;
+    }
+</style>
